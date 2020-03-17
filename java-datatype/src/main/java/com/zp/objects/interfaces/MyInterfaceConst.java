@@ -1,4 +1,4 @@
-package com.zp.objects.abstracts.com.zp.objects.interfaces;
+package com.zp.objects.interfaces;
 
 /**
  * @author zhoupeng

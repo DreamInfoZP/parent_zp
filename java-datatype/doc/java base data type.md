@@ -1,5 +1,14 @@
 
 
+## 疑问区
+
+```tiki wiki
+哈希冲突
+红黑树结构
+```
+
+
+
 ### java数据类型
 
 #### 基本数据类型
@@ -47,6 +56,9 @@
    * 在混合使用
      * 如果是【前++】，那么变量【立刻马上+1】，然后拿着结果进行使用
      * 如果是【后++】，那么变量使用本来的值，【然后再让变量+1】
+3. <<、>>
+   * 左移和右移 二进制编码
+   * https://www.cnblogs.com/chuijingjing/p/9405598.html
 
 #### 逻辑运算符
 
@@ -138,7 +150,7 @@
 
 ​	对象的特征：封装、继承、多态
 
-​	继承时多态的前提，如果没有继承，就没有多态
+​	继承是多态的前提，如果没有继承，就没有多态
 
 ​	局部变量：				直接写员变量名
 
@@ -166,8 +178,8 @@
 #### static
 
 1. 一旦使用static修饰成员方法，那么这就成为了静态方法。静态方法不属于对象，而是属于类的。
-2. 如果又了static关键字，那么不需要创建对象，直接就能通过类名称来使用它
-3. 无论成员变量，换是成员方法。如果有了static，都推荐使用类名称进行调用
+2. 如果有了static关键字，那么不需要创建对象，直接就能通过类名称来使用它
+3. 无论成员变量，还是成员方法。如果有了static，都推荐使用类名称进行调用
 4. 当第一次用到本类时，静态代码块执行唯一的一次
 5. 静态内容总是优先于非静态，所以静态代码块比构造方法先执行
 
@@ -265,14 +277,477 @@ extends继承或者implements实现，是多态性的前提
     if(animal instanceof Cat){
       Cat cat = (Cat) animal;
     }
-    
     ```
 
     
 
+#### Final
 
+final关键字代表最终、不可变的
+
+1. 可以用来修饰一个类
+   * 被final修饰的类不能被继承
+2. 可以用；来修饰一个方法
+   * 被final修饰的方法不能被重写，该方法就是最终的方法
+3. 可以修饰一个局部变量
+4. 可以修饰一个成员变量
+
+**注意点**
+
+1. final和abstract不能修饰同一个类、方法···
+2. 对于基本类型来说，不可变说的是变量当中的数据不可改变
+3. 对于引用类型来说，不可变说的是变量当中的地址不可变
+4. final修饰成员变量,之后必须手动赋值，不会再给默认值
 
 ​	
+
+#### 内部类
+
+```java
+// 直接初始化内部类
+// 外部类名称.内部类名称 = new 外部类名称().new 内部类名称()
+Body.Heart heart = new Body().new Heart();
+```
+
+1. 如果出现了重名现象
+
+   ```java
+   public class Outer(){
+     int num = 10;
+     public class Inner(){
+       int num = 20;
+       public void methodInner(){
+         int num = 30;
+         // 局部变量
+         System.out.println(num);
+         // 内部类成员变量
+         System.out,println(this.num);
+         // 外部类成员变量
+         System.out.println(Outer.this.num);
+       }
+     }
+   }
+   ```
+
+2. 定义一个类的权限修饰符
+
+   * 外部类：public / (default)
+   * 成员内部类：public / protected / (default) / private
+   * 局部内部类：什么都不用写
+
+3. 匿名内部类
+
+   ```java
+   // 匿名内部类的定义格式
+   接口名称 对象名称 = new 接口名称 (){
+     // 覆盖抽象类所有抽象方法
+   };
+   ```
+
+注意点：
+
+* 匿名内部类，在【创建对象】的时候，只能使用唯一一次。如果希望使用多次创建对象，而且类的内容一样的话，那么就必须使用单独定义的实现类
+* 匿名对象，在【调用方法】的时候，只能调用一次。如果希望同一个对象，调用多次方法，那么必须给杜喜庆起个名字
+* 匿名内部类是省略了【实现类 / 子类名称】，但是匿名对象是省略了【对象名称】
+
+
+
+#### JDK工具类
+
+1. Objects
+
+   * Objects.equals()方法防止NullPointException
+
+2. Date
+
+   * ```java
+     // 获取当前时间毫秒数
+     System.currentTimeMillis();
+     // 日期格式 yyyy-MM-dd HH:mm:ss
+     SimpleDateFormt sdf = new SimpleDateFormt("yyyy-MM-dd HH:mm:ss");
+     Date date = new Date(sdf);
+     String text = sdf.format(date);
+     ```
+
+   * Calender中的月份需要+1，西方日历的月份是0～11，中国是1～12
+
+3. System
+
+   * System.copyArray() 复制数组值
+
+#### 单列Collection集合
+
+1. 集合的所有父类都是Collection
+
+2. 集合分为List和Set
+
+   * List集合：有索引、可以存储重复元素、可以保证存取顺序
+   * Set无索引、不可以存储重复元素、存取无序
+
+3. 迭代器
+
+   ```java
+   Collection col = new ArrayList<String>;
+   Iterator<String> ite = col.iterator();
+   while(ite.hasNext()){
+     String i = ite.next();
+   }
+   ```
+
+4. 数据结构
+
+   * 栈
+
+     入栈、压站；出栈、弹栈	栈的结构出口和入口都在同一侧(子弹夹)
+
+   * 队列
+
+     队列先进先出
+
+     入口和出口在两侧
+
+   * 数组
+
+     查询快：数组的地址是连续的，通过数组的首地址可以找到数组，通过数组的索引可以快速查找到某一个元素
+
+     增删慢：数组的长度是固定的，我们想要增加/删除一个元素，必须创建一个新数组，把元素组的数据复制过来
+
+   * 链表
+
+     查询慢：链表中地址不是连续的，每次查询元素，都必须从头开始查询
+
+     增删块：链表结构，增加/删除一个元素，对链表的整体结构没有影响，所以增删块
+
+     * 单项链表
+
+       链表中只有一条链子，不能保证元素的顺序(存储元素和取出元素的顺序可能不一致)
+
+     * 双向链表
+
+       链表中有两条链子，有一条链子专门记录元素的顺序，是一个有序的集合
+
+   * 红黑树
+
+     二叉树、排序树、查找树
+
+     平衡树、不平衡树
+
+     特点：趋近于平衡树，查询的速度非常快，查询叶子结点最大次数和最小次数不能超过2倍
+
+     约束：
+
+     * 结点可以是红色的或者是黑色的
+     * 根结点必须黑色的
+     * 叶子结点(空结点)是黑色的
+     * 每个叶子节点的子结点都是黑色的
+     * 任何一个结点到每一个叶子结点的所有路径上黑色节点数相同
+
+   * 哈希表
+
+     HashSet集合存储数据的结构(哈希表)
+
+     jdk8之前：哈希表 = 数组 + 链表;
+
+     jdk8之后：哈希表 = 数组 + 链表；
+
+     ​					哈希表 = 数组 + 红黑树;
+
+   * 可变参数数组
+
+     ```java
+     // 修饰符 返回值类型 方法名(数据类型 ...变量名){}
+     
+     private static int varArray(int ...arr){
+             System.out.println(arr.length);
+             return arr.length;
+     }
+     ```
+
+     注意事项：
+
+     * 一个方法的参数列表，只能有一个可变参数
+     * 如果方法的参数有多个，那么可变参数必须卸载参数列表的末尾
+
+#### 双列Map集合
+
+1. 特点
+   * Map集合是一个双列集合，一个元素包含两个值(一个key，一个value)
+   * Map集合中的元素，key和value的数据类型可以相同，也可以不同
+   * Map集合中的元素，key是不允许重复的，value可以重复
+   * Map集合中的元素，key和value是一一对应的
+2. Map中key为自定义类型
+   * Map中的key必须是唯一的所以自定义类型必须重写hashCode和equals方法
+
+总结：
+
+* hashtable：底层也是一个哈希表，是一个线程安全的集合，是单线程集合，速度慢
+* hashMap：底层是一个哈希表，是一个线程不安全的集合，是多线程的集合，速度快
+* HashMap：集合(之前的集合)可以存储null值，null键
+* Hashtable集合，不能存储null值，null键
+* Hashtable和Vector集合在jdk1.2之后被更先进的集合(HashMap,ArrayList)取代了
+* Hashtable的子类Properties一让活跃，该集合是一个唯一和IO流结合的集合
+* 
+
+#### 泛型
+
+**优点：**集合不适用泛型，默认类型是Object类型，可以存储人意类型的数据
+
+**弊端：**不安全，会引发异常
+
+**注意点：**泛型没有继承的概念
+
+```java
+// 含有泛型的类定义
+修饰符 class 类名<代表泛型的变量>{}
+
+// 含有泛型的方法
+
+修饰符 <泛型> 返回值类型 方法名(参数列表(使用泛型)){
+  方法体;
+};
+
+// 接受不知道什么类型的数据
+public static void printArray(ArrayList<?> list){
+  Iterator it = list.iterator();
+  while(it.hasNext()){
+    System.out.println(it.next());
+  }
+}
+
+
+// 泛型的上线：此时的泛型是？，必须是Number类型或者Number类型的子类
+public static void getElement(Collection<? extends Number> coll){}
+
+//泛型的下限：此时的泛型？，必须是Number类型或者Number的父类
+public static void gerElement(Collection<? super Number> coll){}
+```
+
+#### 异常处理
+
+* throw关键字
+
+  作用：可以使用throw关键字在指定的方法中抛出指定的异常
+
+  ```java
+  // 使用格式
+  throw new xxxException("异常产生原因");
+  ```
+
+  1. throw关键字必须卸载方法的内部
+  2. throw关键字后边bew的对象必须是Execption或者Execption的子类对象
+  3. theow关键字抛出指定的异常对象，我们就必须处理这个异常对象。
+     * throw关键字后边创建的是RuntimeExecption或者是RuntimeExecption的子类对象，可以不处理交给JVM处理
+     * throw关键字后边创建的是编译异常(写代码的时候报错)，我们必须处理这个异常要么throws或者try{...}catch
+
+* throws 异常处理的第一种方式，交给别人处理
+
+  作用：
+
+  * 当方法内部抛出异常对象的时候，那么我们就必须处理这个异常对象
+  * 可以使用throws关键字处理异常对象，会把异常对象声明抛出给方法的调用者处理(自己不处理-->交给别人处理),最终交给JVM处理--中断处理
+
+  ```java
+  // 使用格式
+  修饰符 返回值类型 方法名(参数列表) throws AAAExecption,BBBExecption……{
+    throw new AAAExecption("原因");
+    throw new BBBExecption("原因");
+  }
+  ```
+
+  注意：
+
+  * throws关键字必须写在方法声明处
+  * throws关键字后边声明的异常必须是Execption或者是Execption的子类
+  * 方法内部如果抛出了多个异常对象，那么throws后边必须也声明过个异常如果抛出的多个异常对象有字父类关系，那么直接声明父类异常即可
+  * 调用一个声明抛出的异常的方法，我们就必须的处理声明的异常要么继续使用throws声明抛出，叫个方法的调用者处理，最终交给JVM要么try{……}catch
+
+* 多个异常使用捕获怎么处理
+
+  * 多个异常分别处理
+  * 多个异常一次捕获，多次处理
+  * 多个异常一次捕获一次处理
+
+* 子父类异常
+
+  * 如果父类抛出多个异常，子类重写父类方法时，抛出和父类相同的异常或者是父类异常的子类或者不抛出异常
+  * 父类方法没有抛出异常，子类重写父类方法时也不可抛出异常。此时子类产生异常，只能捕获处理，不能声明抛出
+
+#### 线程与线程
+
+1. 进程
+
+   **进程：**是指一个内存中运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程；进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行、消亡的过程
+
+   **并发：**指两个或多个事件在同一个时间段内发生
+
+   **并行：**指两个或多个时间在同一时刻发生(同时发生)
+
+2. 线程
+
+   **线程：**线程时进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程，一个进程中可以有多个线程的，这个应用程序也可以称之为多线程程序
+
+* 线程调用
+
+  * 分时调度
+
+    所有线程轮流使用CPU的使用权，平均分配每个线程占用CPU的时间
+
+  * 抢占式调度
+
+    优先让优先级高的线程使用CPU，如果线程的优先级相同，那么会随机选择一个(线程随机性)，JAVA使用的是抢占式调度
+
+* 实现Runnable接口创建多线程的好处：
+
+  1. 避免了单继承的局限性
+
+     一个类只能继承一个类，类继承了Thread类就不能继承其他的类
+
+     实现Runnable接口，换可以继承其他的类，实现其他的接口
+
+  2. 增强了程序的扩展性，降低了程序的耦合性
+
+     实现Runnable接口的方式，把设置线程任务和开启新线程进行了分离
+
+     实现类中，重写run方法：用来设置线程任务
+
+     创建Thread类对象，调用start方法：用来开启新线程
+
+#### Lambda表达式标准格式
+
+```java
+// Lambad表达式的标准格式
+a.一些参数;
+b.一个箭头;
+c.一段代码;
+格式：
+  (参数列表)->{一些重写方法的代码}
+():接口中抽象方法的参数列表，没有参数，就空着；有参数就写出参数，多个参数使用,分割;
+->:传递的意思，把参数传递给方法体{}
+{}:重写接口的抽象方法的方法体
+```
+
+
+
+#### File类
+
+1. 概念
+
+   **java.io.File**类是文件和目录路径名的抽象表示，主要用于文件和目录的创建、查找、删除等操作
+
+```java
+ /**
+         * static String pathSeparator 与系统有关的路径分隔符
+         * static char pathSeparatorChar 与系统有关的路径分隔符
+         *
+         * static String separator 与系统有关的默认名称分隔符，为了方便，他被表示为一个字符串
+         * static char separatorChar 与系统有关的默认路径分隔符
+         */
+
+        String pathSeparator = File.pathSeparator;
+
+        // 路径分隔符    windows:分号; linux:冒号:
+        System.out.println(pathSeparator);
+
+        String separator = File.separator;
+
+        // 文件名称分隔符  windows:反斜杠\    linux:正斜杠/
+        System.out.println(separator);
+
+
+/**
+     * File类遍历(文件夹)目录功能
+     *  public String[] list():返回一个String数组
+     *  public File[] listFiles():返回一个File数组，表示该File目录中的所有子文件或目录
+     */
+
+```
+
+```java
+
+/**
+ * @author zhoupeng
+ * <p>
+ * 写入数据的原理(内存-->硬盘)
+ * java程序-->JVM(java虚拟机)-->OS(操作系统)-->调用OS写数据的方法-->把数据写到文件中
+ * <p>
+ * 字节输出流的使用步骤:
+ * 1.创建一个FileOutputStream对象，构造方法中传递写入数据的目的地
+ * 2.调用FileOutputStream对象中的方法write,把数据写入到文件中
+ * 3.释放资源(流使用会占用一定的内存，使用完毕要把内存清空，提高程序的效率)
+ * <p>
+ * 换行写:写换行符号
+ * windows:\r\n
+ * linux:/n
+ * mac:/r
+ * <p>
+ * <p>
+ * 读取数据的原理(硬盘-->内存)
+ * java程序-->JVM-->OS-->OS读取数据的方法-->读取文件
+ * <p>
+ * 字节输入流的使用步骤:
+ * 1.创建FileInputStream对象，构造方法中绑定要读取的数据源
+ * 2.使用FileInputStream对象中的方法read,读取文件
+ * 3.释放资源
+ */
+public class OutputStreamTest {
+    public static void main(String[] args) {
+//        fileOutputStreamMethod();
+        fileInputStreamMethod();
+    }
+
+    private static void fileInputStreamMethod() {
+        try {
+            FileInputStream fis = new FileInputStream("/Users/zhoupeng/Desktop/zp/a.txt");
+            int len;
+            while ((len = fis.read()) != -1) {
+                System.out.print((char) len);
+            }
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void fileOutputStreamMethod() {
+        try {
+            FileOutputStream fos = new FileOutputStream("/Users/zhoupeng/Desktop/zp/a.txt");
+            fos.write(97);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+```java
+
+```
+
+
+
+注意事项：
+
+File类是一个与系统无关的类，任何操作系统都可以使用这个类中的方法
+
+重点：
+
+file:文件
+
+directory:目录/文件夹
+
+path:路径
+
+#### IO
+
+* 一切皆为字节
+
+  一切文件数据(文本、图片、视频等)在存储时，都是二进制的形式保存，都是一个一个字节，那么传输一样如此。所以，字节流可以传输任意文件数据。在操作流的时候，我们要时刻明确，无论使用什么样的流对象，底层传输的始终为二进制数据。
+
+
 
 
 

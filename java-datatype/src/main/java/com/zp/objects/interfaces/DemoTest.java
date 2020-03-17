@@ -1,6 +1,6 @@
-package com.zp.objects.abstracts.com.zp.objects.interfaces;
+package com.zp.objects.interfaces;
 
-public class DemoTest implements A,B{
+public class DemoTest implements A, B {
 
     @Override
     public void a() {
