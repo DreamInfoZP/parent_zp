@@ -724,7 +724,31 @@ public class OutputStreamTest {
 
 
 ```java
+/**
+ * 
+ * 读取和写入字符
+ * 
+ * 
+ * flush方法是和close方法
+ *      flush:刷新缓冲区，刘对象可以继续使用
+ *      close:现刷新缓冲区，然后通知系统释放资源。刘对象不可以再继续使用
+ * 
+ * @author zhoupeng
+ */
+public class ReaderAndWriter {
+    public static void main(String[] args) {
+        try {
+            FileWriter fw = new FileWriter("路径+文件");
 
+            fw.write("aa");
+
+//            fw.close();
+            fw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```
 
 
@@ -746,6 +770,191 @@ path:路径
 * 一切皆为字节
 
   一切文件数据(文本、图片、视频等)在存储时，都是二进制的形式保存，都是一个一个字节，那么传输一样如此。所以，字节流可以传输任意文件数据。在操作流的时候，我们要时刻明确，无论使用什么样的流对象，底层传输的始终为二进制数据。
+
+JDK7处理流异常
+
+```java
+package com.zp.objects.io;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+/**
+ * JDK7的新特新
+ * 在try后边可以增加一个()，在括号中可以定义流对象
+ * 那么这个流对象的作用域就在try中有效
+ * try中的代码执行完毕，会自动把刘对象释放，不用写finally
+ *      格式
+ *          try(定义刘对象;定义刘对象...){
+ *              可能会产生异常的代码
+ *          }catch(异常类变量 变量名){
+ *              异常处理逻辑
+ *          }
+ *
+ * @author zhoupeng
+ */
+public class JDK7CopyFile {
+    public static void main(String[] args) {
+        String path = "/Users/zhoupeng/Desktop/zp";
+        String fileName = "I_Tap102_20200217_001.xlsx";
+
+        int index = fileName.lastIndexOf('.');
+        String prefix = fileName.substring(0, index) + '1';
+        String suffix = fileName.substring(index);
+
+        String newFile = path + File.separator + prefix + suffix;
+        File file = new File(newFile);
+        try (
+                FileInputStream fis = new FileInputStream(path + File.separator + fileName);
+                FileOutputStream fos = new FileOutputStream(file)) {
+
+//            if (file.createNewFile()) {
+
+
+            byte[] bytes = new byte[1024];
+            int len;
+            while ((len = fis.read(bytes)) != -1) {
+                fos.write(bytes, 0, len);
+            }
+
+            // 先关闭写的后关闭读的
+        } catch (IOException e) {
+            System.out.println("异常情况请Debug分析");
+            e.printStackTrace();
+        }
+
+
+    }
+}
+```
+
+JDK9的新特性
+
+```java
+/**
+ * JDK9的新特新
+ *  try的前边可以定义刘对象
+ *  在try后边的()中可以直接引入流对象的名称(变量名)
+ *  在try代码执行完毕之后，流对象也可以释放掉,不用谢finally
+ *  格式
+ *      A a = new A();
+ *      B b = new B();
+ *      try(a,b){
+ *          可能会产生异常的代码
+ *      }catch(异常类变量 变量名){
+ *          异常的处理逻辑
+ *      }
+ */
+```
+
+#### 序列化
+
+对象和属性不能被static和transient(不参与序列化)关键字修饰
+
+#### 网络编程
+
+1. 软件架构
+
+   BS、CS
+
+2. 协议分类
+
+   **UDP：**用户数据报协议(User Datagram Protocol)无连接通信协议
+
+   特点：数据被限制在64kb，超过这个单位就不能发送了
+
+   **TCP：**传输控制协议(Transmission Control Protocol)面向对象的通信协议
+
+   三次握手
+
+3. 端口号
+
+   端口号：是一个逻辑端口,我们无法直接看到,可以使用一些软件查看端口
+
+   当我们使用网络软件一打开，那么操作系统就会为网络分配一个随机 的端口号或者网络软件在打开的时候和系统要指定的端口号
+
+   端口号是由两个字节组成，取值范围在0～65535之间
+
+   注意：
+
+   ​	1024之前的端口号我们不能使用，已经被系统分配给已知的网络软件了网络软件的端口号不能重复
+
+#### 函数式接口
+
+函数式接口在Java中是指：有且仅有一个抽象方法的接口
+
+**备注：**"语法糖"是指使用更加方便，但是原理不变的语法代码。例如在遍历集合时使用forEach语法，其实底层的实现原理仍然是迭代器，这便是"语法糖 "。从应用层面来讲，Java中Lambda可以被当作匿名内部类的"语法糖"，但是二者在原理上是不同的。
+
+```java
+@FunctionInterface
+// 该注解可以检验该接口是否是函数式接口
+
+/**
+* 函数式接口：有且仅有一个抽象方法的接口，
+* 当然接口中可以包含其他的方法(默认，静态，私有)
+*/
+public interface MyFunctionInterface(){
+  public abstract void method();
+}
+```
+
+#### Lambda表达式
+
+Supplier 生产型
+
+Consumer 消费型
+
+Predicate 判断型
+
+Function 数据类型转换型
+
+
+
+and、andThen、apply等方法
+
+
+
+#### Stream流
+
+"Stream流"其实是一个集合元素的函数模型，他并不是集合，也不是数据结构，其本身不存储任何的元素(或其他地址值)
+
+Stream(流)是一个来自数据源的元素队列
+
+* 元素是特定类型的对象，形成一个队列。Java中的Stream并不会存储元素，而是按需计算
+* **数据源** 流的来源。可以是集合，数组等
+
+基本步骤：
+
+​	获取一个数据源(Source)——>数据转换——>执行操作回去想要的结果，每次转换原油Stream对象不改变，返回一个新的Stream对象(可以有多次转换),这就允许对其操作可以像链条一样排列，变成一个管道
+
+常用方法
+
+* 延迟方法：返回值类型仍然是Stream接口滋生类型的方法，因此支持链式调用。(除了终结方法外，其余方法均为延迟方法)
+
+* 终结方法：返回值不在是Stream接口自身类型的方法，因此不在支持类似StringBuilder那样的链式调用
+
+  例如：count、forEach
+
+```java
+/**
+*Lambda表达式的目的，打印参数传递的字符串
+
+把参数s,传递给了System.out对象，调用了对象中的方法prinln对字符串进行打印
+
+注意：
+
+1. System.out对象是已经存在的
+2. println方法也是已经存在的
+
+所以我们可以使用方法引用来优化Lambda表达式
+
+System.out::println
+*/
+```
+
+
 
 
 
