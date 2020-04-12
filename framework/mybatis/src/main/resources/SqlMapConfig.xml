@@ -22,10 +22,10 @@
     <!--  指定映射配置文件的位置，映射文件指的是每个dao独立的配置文件
           如果是用注解来配置的话需要使用class属性指定
     -->
-    <!--    <mappers>-->
-    <!--        <mapper class="com.zp.dao.IUserDao"/>-->
-    <!--    </mappers>-->
     <mappers>
-        <mapper resource="com/zp/dao/IUserDao.xml"/>
+        <mapper class="com.zp.dao.IUserDao"/>
     </mappers>
+    <!--    <mappers>-->
+    <!--        <mapper resource="com/zp/dao/IUserDao.xml"/>-->
+    <!--    </mappers>-->
 </configuration>
