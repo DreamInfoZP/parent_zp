@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置spring的ioc，把service对象配置进来 -->
+    <bean id="accountService" class="com.zp.aop.xml.service.impl.IAccountServiceImpl"/>
+
+    <!-- spring基于XML的AOP配置步骤
+        1.把通知Bean也交给Spring管理
+        2.使用aop:config标签表明开始的AOP配置
+        3.使用aop:aspect标签表明配置切面
+            id
+            ref
+        4.在aop:aspect标签内部使用对应标签来配置通知的类型
+            aop:before:表示配置前置通知
+                method属性
+                pointcut属性：用于指定切入点表达式，该表达式的含义指的是对业务中那些方法增强
+
+            切入点表达式的写法
+                关键字：execution(表达式)
+                表达式：
+                    访问修饰符 返回值 报名...类名.方法名(参数列表)
+                标准写法 public void com.zp.aop.xml.service.impl.IAccountServiceImpl.saveAccount()
+                通配符写法 * *..*.*(..)
+
+                实际业务开发中切入点表达式的通常写法:
+                    切到业务层实现类下的所有方法
+                     * com.zp.aop.xml.service.impl.*.*(..)
+    -->
+
+    <!-- 配置Logger类 -->
+    <bean id="logger" class="com.zp.aop.xml.Logger"></bean>
+
+    <!-- 配置AOP -->
+    <aop:config>
+        <!-- 配置切面 -->
+        <aop:aspect id="logAdvice" ref="logger">
+            <!-- 配置通知类型，并且建立通知方法和点方法的关联 -->
+            <!--            <aop:before method="printLog"-->
+            <!--                        pointcut="execution(public void com.zp.aop.xml.service.impl.IAccountServiceImpl.saveAccount())"></aop:before>-->
+            <aop:before method="printLog"
+                        pointcut="execution(* *..*.*(..))"></aop:before>
+
+            <!-- 前置通知 -->
+            <!--            <aop:before method="printLog"></aop:before>-->
+            <!-- 后置通知 -->
+            <!--            <aop:after-returning method=""></aop:after-returning>-->
+            <!-- 异常通知 -->
+            <!--            <aop:after-throwing method=""-->
+            <!-- 最终通知 -->
+            <!--            <aop:after method=""></aop:after>-->
+
+            <!--            <aop:pointcut id="pt1" expression="execution(* com.zp.aop.xml.service.impl.*.*(..))"/>-->
+
+            <!-- 环绕通知
+                1.问题：当我们配置了环绕通知之后，切入点方法没有执行，而通知方法执行了
+                2.分析：需要明确的切入点方法调用
+                3.解决：Spring框架为我们提供了一个接口:ProceedingJoinPoint.该接口有一个方法proceed(),此方法就相当于明确调用切入点方法
+                        该接口可以作为环绕通知的方法参数，在程序执行时，spring框架会为我们提供该接口的实现类供我们使用
+
+                spring中的环绕通知：
+                    他是spring框架为我们提供的一种可以在代码中手动控制增强方法时执行的方法
+             -->
+            <!--            <aop:around method="aroudPrintLog"></aop:around>-->
+        </aop:aspect>
+    </aop:config>
+
+</beans>

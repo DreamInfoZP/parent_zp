@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 将对象创建交给Spring来管理 -->
+    <!-- Spring对bena的管理细节
+        1.创建bena的三种方式
+        2.bena对象的作用范围
+        3.bena对象的生命周期
+     -->
+
+    <!-- 创建bean的三种方式 -->
+    <!-- 第一种方式：使用默认构造函数创建
+            在spring配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时
+            采用的就是默认构造函数创建bena对象，此时如果类中没有默认的构造函数，创建失败
+     -->
+    <bean id="accountService" class="com.zp.service.impl.IAccountServiceImpl"/>
+    <bean id="accountDao" class="com.zp.dao.impl.IAccountDaoImpl"/>
+
+    <!-- 第二种方式：使用普通工厂中的方法创建对象(使用默认类中的方法创建对象，并存入spring容器中) -->
+    <!--    <bean id="factoy" class="com.zp.factory"/>-->
+    <!--    <bean id="accoutService" factory-bean="factoy" factory-method="factoryMethod"/>-->
+
+    <!-- 第三种方式：使用工厂的静态方法创建对象（使用个类中的静态方法创建对象，并存入spring容器） -->
+    <!--    <bean id="accountService" class="com.zp.service.impl.IAccountServiceImpl" factory-method="staticMethod"/>-->
+
+
+    <!-- 生命周期
+            单例对象：
+                出生：当容器创建时对象出生
+                存活：只要容器还在，对象一直存活
+                死亡：单例对象的生命周期和容器相同
+            多例对象：
+                出生：当我们使用第项时spring框架为我们创建
+                存活：对象只要是使用过程就一直活着
+                死亡：对象长时间不用，且没有别的对象引用，由java垃圾回收机制回收
+
+     -->
+    <!--     <bean id="accountService" scope="singleton" class="" init-method="" destroy-method=""/>-->
+    <!--    <bean id="accountService" scope="prototype" class="" init-method="" destroy-method=""/>-->
+
+
+</beans>
