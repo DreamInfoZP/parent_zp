@@ -7,8 +7,7 @@ public class IAccountServiceTest extends TestCase {
 
     public void testTransfer() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("bean_anno_xml.xml");
-        IAccountService accountServcie = context.getBean("accountServi" +
-                "ce", IAccountService.class);
+        IAccountService accountServcie = context.getBean("accountService", IAccountService.class);
         accountServcie.transfer("aaa", "bbb", 100f);
     }
 }
